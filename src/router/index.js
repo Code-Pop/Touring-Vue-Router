@@ -5,6 +5,7 @@ import EventDetails from '../views/event/Details.vue'
 import EventRegister from '../views/event/Register.vue'
 import EventEdit from '../views/event/Edit.vue'
 import About from '../views/About.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 
