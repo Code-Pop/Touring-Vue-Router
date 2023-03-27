@@ -1,4 +1,7 @@
 {
+  "engines" : { 
+    "node" : ">=16.0.0 <17.0.0"
+  },
   "name": "real-world-vue",
   "version": "0.1.0",
   "private": true,
@@ -9,9 +12,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "nprogress": "^0.2.0",
     "vue": "^3.0.0-0",
-    "vue-router": "^4.0.4",
+    "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
