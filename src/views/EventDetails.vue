@@ -5,24 +5,21 @@
     <p>{{ event.description }}</p>
   </div>
 </template>
-
-<script>
+<script setup>
 import EventService from '@/services/EventService.js'
-export default {
-  props: ['id'],
-  data() {
-    return {
-      event: null
-    }
-  },
-  created() {
-    EventService.getEvent(this.id)
-      .then(response => {
-        this.event = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-}
+import { onMounted, ref } from 'vue'
+import { defineProps } from 'vue'
+
+const props = defineProps(['id'])
+
+const event = ref(null)
+onMounted(() => {
+  EventService.getEvent(props.id)
+    .then(response => {
+      event.value = response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+})
 </script>

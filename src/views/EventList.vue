@@ -5,30 +5,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
 
-export default {
-  name: 'EventList',
-  components: {
-    EventCard
-  },
-  data() {
-    return {
-      events: null
-    }
-  },
-  created() {
-    EventService.getEvents()
-      .then(response => {
-        this.events = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-}
+const events = ref(null)
+
+onMounted(() => {
+  EventService.getEvents()
+    .then(response => {
+      events.value = response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+})
 </script>
 
 <style scoped>
