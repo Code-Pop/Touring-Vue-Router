@@ -3,8 +3,7 @@
   <p>{{ event.description }}</p>
 </template>
 
-<script>
-export default {
-  props: ['event']
-}
+<script setup>
+import { defineProps } from 'vue'
+defineProps(['event'])
 </script>

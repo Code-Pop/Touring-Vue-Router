@@ -3,18 +3,19 @@
   <button @click="register">Register Me</button>
 </template>
 
-<script>
-export default {
-  props: ['event'],
-  methods: {
-    register() {
-      // Call to API
-      // If registered then redirect to event details
+<script setup>
+import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 
-      this.$router.push({
-        name: 'EventDetails'
-      })
-    }
-  }
+const router = useRouter()
+
+defineProps(['event'])
+
+const register = () => {
+  // Call to API
+  // If registered then redirect to event details
+  router.push({
+    name: 'EventDetails'
+  })
 }
 </script>
