@@ -12,23 +12,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref, defineProps } from 'vue'
 import EventService from '@/services/EventService.js'
-export default {
-  props: ['id'],
-  data() {
-    return {
-      event: null
-    }
-  },
-  created() {
-    EventService.getEvent(this.id)
-      .then(response => {
-        this.event = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-}
+
+const props = defineProps(['id'])
+
+const event = ref(null)
+onMounted(() => {
+  EventService.getEvent(props.id)
+    .then(response => {
+      event.value = response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+})
 </script>
