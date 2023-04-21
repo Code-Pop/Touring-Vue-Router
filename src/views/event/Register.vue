@@ -3,26 +3,25 @@
   <button @click="register">Register Me</button>
 </template>
 
-<script>
-export default {
-  props: ['event'],
-  inject: ['GStore'],
-  methods: {
-    register() {
-      // Call to API
-      // If registered then redirect to event details
+<script setup>
+import { computed, defineProps } from 'vue'
+import { useRouter } from 'vue-router'
+import { inject } from 'vue'
 
-      this.GStore.flashMessage =
-        'You are successfully registered for ' + this.event.title
+const props = defineProps(['event'])
+const router = useRouter()
+const GStore = inject('GStore')
 
-      setTimeout(() => {
-        this.GStore.flashMessage = ''
-      }, 3000)
-
-      this.$router.push({
-        name: 'EventDetails'
-      })
-    }
-  }
+const register = () => {
+  // Call to API
+  // If registered then redirect to event details
+  GStore.flashMessage =
+    'You are successfully registered for ' + props.event.title
+  setTimeout(() => {
+    GStore.flashMessage = ''
+  }, 3000)
+  router.push({
+    name: 'EventDetails'
+  })
 }
 </script>

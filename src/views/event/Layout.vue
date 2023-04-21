@@ -12,30 +12,30 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref, defineProps, computed } from 'vue'
 import EventService from '@/services/EventService.js'
-export default {
-  props: ['id'],
-  data() {
-    return {
-      event: null
-    }
-  },
-  created() {
-    EventService.getEvent(this.id)
-      .then(response => {
-        this.event = response.data
-      })
-      .catch(error => {
-        if (error.response && error.response.status == 404) {
-          this.$router.push({
-            name: '404Resource',
-            params: { resource: 'event' }
-          })
-        } else {
-          this.$router.push({ name: 'NetworkError' })
-        }
-      })
-  }
-}
+import { useRouter } from 'vue-router'
+
+const props = defineProps(['id'])
+
+const router = useRouter()
+
+const event = ref(null)
+onMounted(() => {
+  EventService.getEvent(props.id)
+    .then(response => {
+      event.value = response.data
+    })
+    .catch(error => {
+      if (error.response && error.response.status == 404) {
+        router.push({
+          name: '404Resource',
+          params: { resource: 'event' }
+        })
+      } else {
+        router.push({ name: 'NetworkError' })
+      }
+    })
+})
 </script>

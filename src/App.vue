@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="flashMessage" v-if="GStore.flashMessage">
+    <div id="flashMessage" v-if="GStore?.flashMessage">
       {{ GStore.flashMessage }}
     </div>
     <div id="nav">
@@ -11,10 +11,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  inject: ['GStore']
-}
+<script setup>
+import { inject } from 'vue'
+
+const GStore = inject('GStore')
 </script>
 
 <style>
