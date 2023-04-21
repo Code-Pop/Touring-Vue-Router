@@ -10,15 +10,14 @@
   </router-link>
 </template>
 
-<script>
-export default {
-  props: {
-    event: {
-      type: Object,
-      required: true
-    }
+<script setup>
+import { defineProps } from 'vue'
+defineProps({
+  event: {
+    type: Object,
+    required: true
   }
-}
+})
 </script>
 
 <style scoped>
