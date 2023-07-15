@@ -31,7 +31,7 @@ export default {
 }
 
 .event-card:hover {
-  transform: scale(1.01);
+  transform: scale(1.05);
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
 }
 

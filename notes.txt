@@ -1,0 +1,89 @@
+El server mock que esta usando lee los query:
+_limit -> Cuantos items devolver maximo
+_page -> Que pagina devolver
+
+Esto ojo que es algo de la programacion del backend, calculo que el GET toma esos params y genera el SQLQuery correspondiente para devolver eso.
+
+Vamos a agregar en EventService.js los parametros en los eventos que se le piden al server:
+
+getEvents(perPage, page) {
+    return apiClient.get('/events?_limit=' + perPage + '&_page=' + page)
+  }
+
+Despues se agrega en el router las props en el EventList, aca se usa el metodo Function Mode
+
+props: route => ({ page: parseInt(route.query.page) || 1 })
+
+Despues se agrega al componente EventList 'props' para que pueda recibir 'page'
+
+props: ['page']
+
+Y este prop se pasa como argumento en el created() que es donde llama el evento para tomar la data del backend. Tambien se manda como argumento el perPage en 2
+
+EventService.getEvents(2, this.page)
+
+OJO aca que en el browser no se porque habia quedado cacheado algo y no estaba actualizando el apiClient.get
+
+Agregado de Paginacion
+-----------------------
+
+Se agregan los routerlink con el page correspondiente
+
+<router-link 
+:to="{ name: 'EventList', query: { page: page - 1 }}"
+    rel="prev"
+    v-if="page != 1"
+    >Prev Page
+</router-link>
+
+<router-link 
+    :to="{ name: 'EventList', query: { page: page + 1 }}"
+    rel="next"
+    >Next Page
+</router-link>
+
+Lo que pasa aca es que al clickear no se actualiza la pagina porque el router entiende que YA ESTA en el componente del router (en este caso EventList). Por eso no necesita recargar el componente.
+
+Para esto se usa una funcion de Vue: watchEffect
+
+created() {
+    watchEffect(() => {
+      EventService.getEvents(2, this.page)
+        .then(response => {
+          this.events = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    })
+  }
+
+  Lo que hace es que cuando los reactive objects dentro de watchEffect cambian, Vue corre la funcion nuevamente, sin necesidad de cargar el componente
+
+  Se agrego un this.events = null para disparar el watch y limpiar el componente para hacerle saber al user que algo esta pasando, sino se quedaria colgada la app hasta que le responde el backend. Yo calculo que esto da lugar a poner un loader
+
+  El backend devuelve como "headers" el dato de cuantos elementos hay en total. Este headers se le puede pedir al backend con response.headers
+
+  this.totalEvents = response.headers['x-total-count']
+
+  Entonces, lo tomamos y lo guardamos en un reactive object totalEvents.
+
+  Se agrega un computed function, que basicamente son funciones que hacen operaciones en el lado de frontend que calculan cosas y devuelven el resultado.
+
+  computed: {
+    hasNextPage() {
+      var totalPages = Math.ceil(this.totalEvents / 2)
+
+      return this.page < totalPages
+    }
+  }
+
+
+Y finalmente agrego al routerlink del Next, un if que hace que sea visible solo si la funcion devuelve true:
+
+<router-link 
+      :to="{ name: 'EventList', query: { page: page + 1 }}"
+      rel="next"
+      v-if="hasNextPage"
+      >Next Page
+    </router-link>
