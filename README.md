@@ -30,4 +30,4 @@ npm run lint
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-This repository is for learning purposes only, it's not for production use.
+\*\*This\ repository\ is\ for\ learning\ purposes\ only\,\ it\'s\ not\ for\ production\ use\.\*\*
